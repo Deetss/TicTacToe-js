@@ -1,33 +1,23 @@
-div[class^="cell-"] {
-  width: 30%;
-  height: 30%;
-  border: 1px solid black;
-}
-
-div[id^="row-"] {
-  height: 30%;
-  width: 30%;
-}
 
 body {
-  background: url('https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.goodwp.com%2Fimages%2F201103%2Fgoodwp.com_15614.jpg&f=1') right top;
+  /*background: url('https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.goodwp.com%2Fimages%2F201103%2Fgoodwp.com_15614.jpg&f=1') right top; */
   padding: 8%;
   margin: 0;
   height: 100%;
 }
 
-.sticky-note {
-  height: 20%;
-  width: 20%;
-  background-color: yellow;
+.board {
+  display: grid;
+  height: 300px;
+  width: 300px;
+  background-color: black;
+  grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+  grid-gap: 10px 10px;
+  text-align: center;
+  font-size: 48px;
 }
 
-.vertical {
-  width: 100%;
-  height: 2%;
-}
-
-.horizontal {
-  width: 2%;
-  height: 100%;
+div>span{
+  display: block;
+  margin-top: 25%;
 }

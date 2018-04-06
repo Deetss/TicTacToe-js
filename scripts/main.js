@@ -9,9 +9,10 @@ var gameboard = [
 const markers = ["X", "O"];
 var curTurn = 0;
 
-const Player = (name, playerNum) => {
+const Player = (nameInput, playerNum) => {
   let mark = markers[playerNum - 1];
-
+  let name = nameInput;
+  
   return { name, mark };
 };
 
@@ -19,55 +20,46 @@ const player1 = Player(prompt("Enter a name for Player 1:"), 1);
 const player2 = Player(prompt("Enter a name for Player 2:"), 2);
 var players = [player1, player2];
 
-var currentPlayer = players[0];
+var currentPlayer;
 
 function generateBoard() {
   var container = document.createElement("div");
   currentPlayer = players[0];
   document.querySelector('body').appendChild(container);
-  container.classList.add("sticky-note");
+  container.classList.add("board");
 
   for (let y = 0; y < 3; y++) {
-    var row = document.createElement("div");
-    var curRow = container.appendChild(row);
-    curRow.setAttribute("id", "row-" + y);
     for (let x = 0; x < 3; x++) {
       var cell = document.createElement("div");
       var content = document.createElement("span");
 
-      curRow.appendChild(cell);
-      cell.setAttribute("class", "cell-" + x);
+      container.appendChild(cell);
+      cell.setAttribute("id", "cell-"+ x + "-" + y);
+      cell.setAttribute("style", "background-color: white;");
       cell.appendChild(content);
-      cell.setAttribute('data-id', x + " " + y);
 
       content.innerHTML = gameboard[y][x];
 
       cell.addEventListener("click", function() {
         if (validMove(x, y)) {
           placeMark(currentPlayer.mark, x, y);
-          rotatePlayer();
         }
-        refreshBoard();
       });
     }
   }
 }
 
 function clearBoard() {
-  var container = document.getElementById("board-container");
+  var container = document.querySelector(".board");
   for (let y = 0; y < 3; y++) {
-    var curRow = document.getElementById("row-" + y);
     for (let x = 0; x < 3; x++) {
-      var cell = document.querySelector(".cell-" + x);
-      curRow.removeChild(cell);
+      var cell = document.querySelector("#cell-"+ x + "-" + y);
+      var content = cell.childNodes[0];
+      cell.removeChild(content);
+      container.removeChild(cell);
     }
-    container.removeChild(curRow);
   }
-}
-
-function refreshBoard() {
-  clearBoard();
-  generateBoard();
+  container.parentNode.removeChild(container);
 }
 
 function resetGame() {
@@ -76,13 +68,22 @@ function resetGame() {
     [" ", " ", " "],
     [" ", " ", " "]
   ];
-
+  curTurn = 0;
   players = [player1, player2];
+  clearBoard();
+  generateBoard();
 }
 
 function placeMark(mark, posX, posY) {
+  var cell = document.querySelector("#cell-"+ posX + "-" + posY);
+  var content = cell.childNodes[0];
+  
   gameboard[posY][posX] = mark;
+  
+  content.innerHTML = gameboard[posY][posX];
+  
   checkBoard(currentPlayer);
+  rotatePlayer();
 }
 
 function validMove(posX, posY) {
@@ -114,7 +115,8 @@ function checkBoard(currentTurnPlayer) {
 }
 
 function rotatePlayer() {
-  players = players.reverse();
+  players.reverse();
+  currentPlayer = players[0];
   curTurn++;
 }
 
