@@ -7,7 +7,7 @@ var gameboard = [
 ];
 
 const markers = ["X", "O"];
-var curTurn = 0;
+let curTurn = 0;
 
 const Player = (nameInput, playerNum) => {
   let mark = markers[playerNum - 1];
@@ -16,9 +16,10 @@ const Player = (nameInput, playerNum) => {
   return { name, mark };
 };
 
-const player1 = Player(prompt("Enter a name for Player 1:"), 1);
-const player2 = Player(prompt("Enter a name for Player 2:"), 2);
-var players = [player1, player2];
+var nameSubmit = document.querySelector(".name-submit");
+  
+let player1, player2, players;
+
 
 var currentPlayer;
 
@@ -43,10 +44,18 @@ function generateBoard() {
       cell.addEventListener("click", function() {
         if (validMove(x, y)) {
           placeMark(currentPlayer.mark, x, y);
+          
+          checkBoard(currentPlayer);
+          rotatePlayer();
         }
       });
     }
   }
+}
+
+function removeForm() {
+  var form = document.querySelector("form");
+  form.remove();
 }
 
 function clearBoard() {
@@ -81,9 +90,6 @@ function placeMark(mark, posX, posY) {
   gameboard[posY][posX] = mark;
   
   content.innerHTML = gameboard[posY][posX];
-  
-  checkBoard(currentPlayer);
-  rotatePlayer();
 }
 
 function validMove(posX, posY) {
@@ -107,7 +113,7 @@ function checkBoard(currentTurnPlayer) {
     gameOver();
   } else if (gameboard[2][0] == currentTurnPlayer.mark && gameboard[1][1] == currentTurnPlayer.mark && gameboard[0][2] == currentTurnPlayer.mark) {
     gameOver();
-  } else if (curTurn >= 8){
+  } else if (curTurn > 8){
     gameOver("tie");
   }else {
     console.log("Still playing!");
@@ -121,6 +127,7 @@ function rotatePlayer() {
 }
 
 function gameStart() {
+  removeForm();
   generateBoard();
 }
 
@@ -133,4 +140,20 @@ function gameOver(result = "") {
   resetGame();
 }
 
-gameStart();
+nameSubmit.addEventListener("click", function(event) {
+  event.preventDefault();
+  
+  var player1Input = document.querySelector("#player1Name").value;
+  var player2Input = document.querySelector("#player2Name").value;
+  
+  if (player1Input != "" && player2Input != "" ){
+
+    player1 = Player(player1Input, 1);
+    player2 = Player(player2Input, 2);
+    players = [player1, player2];
+    
+    gameStart();
+  } else {
+    alert("You need two players to start!");
+  }
+});

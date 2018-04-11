@@ -6,7 +6,22 @@ body {
   height: 100%;
 }
 
+h1 {
+  width: 50%;
+  margin: 0 auto;
+  margin-bottom: 8%;
+  text-align: center;
+}
+
+form{
+  width: 50%;
+  margin: 0 auto;
+  margin-bottom: 8%;
+  text-align: center;
+}
+
 .board {
+  margin: 0 auto;
   display: grid;
   height: 300px;
   width: 300px;
